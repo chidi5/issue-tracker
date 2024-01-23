@@ -19,3 +19,9 @@
 body {
   min-height: 100vh;
 }
+
+@layer utilities {
+  .nav-links {
+    @apply text-zinc-500 hover:text-zinc-800 transition-colors;
+  }
+}

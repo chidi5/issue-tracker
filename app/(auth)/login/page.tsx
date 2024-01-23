@@ -1,8 +1,15 @@
 import { Flex } from "@radix-ui/themes";
+import dynamic from "next/dynamic";
 import React from "react";
-import SignUpForm from "../_components/SignUpForm";
 
-const RegisterPage = () => {
+const SignInForm = dynamic(
+  () => import("@/app/(auth)/_components/SignInForm"),
+  {
+    ssr: false,
+  }
+);
+
+const LoginPage = () => {
   return (
     <Flex justify="center" align="center" className="min-h-[30rem]">
       <Flex
@@ -12,10 +19,10 @@ const RegisterPage = () => {
         height="100%"
         className="w-screen overflow-hidden text-center"
       >
-        <SignUpForm />
+        <SignInForm />
       </Flex>
     </Flex>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

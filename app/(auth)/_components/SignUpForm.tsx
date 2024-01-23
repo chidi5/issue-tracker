@@ -37,7 +37,7 @@ const SignUpForm = () => {
       setSubmitting(true);
       console.log(data);
       await axios.post("/api/register", data);
-      router.push("/api/auth/signin");
+      router.push("/login");
     } catch (error) {
       setSubmitting(false);
       setError("Unexpected error occurred.");
@@ -72,6 +72,7 @@ const SignUpForm = () => {
                   size="3"
                   placeholder="name"
                   {...register("name")}
+                  required
                 />
               </TextField.Root>
               <div className="text-xs">

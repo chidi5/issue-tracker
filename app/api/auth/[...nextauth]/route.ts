@@ -6,6 +6,9 @@ import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 
 const handler = NextAuth({
+  pages: {
+    signIn: "/login",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -17,7 +20,7 @@ const handler = NextAuth({
       credentials: {
         email: {
           label: "Email",
-          type: "text",
+          type: "email",
           placeholder: "jsmith@smith.com",
         },
         password: { label: "Password", type: "password" },
@@ -25,7 +28,7 @@ const handler = NextAuth({
       async authorize(credentials) {
         // check to see if email and password is there
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Please enter an email and password");
+          return null;
         }
 
         // check to see if user exists
@@ -37,7 +40,7 @@ const handler = NextAuth({
 
         // if no user was found
         if (!user || !user?.hashedPassword) {
-          throw new Error("No user found");
+          return null;
         }
 
         // check to see if password matches
@@ -48,7 +51,7 @@ const handler = NextAuth({
 
         // if password does not match
         if (!passwordMatch) {
-          throw new Error("Incorrect password");
+          return null;
         }
 
         return user;
