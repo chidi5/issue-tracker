@@ -110,7 +110,9 @@ const SignInForm = () => {
             <Text>Or</Text>
             <hr className="w-full border bg-gray-500 border-gray-500" />
           </Flex>
-          <GoogleLoginButton onClick={() => signIn("google")}>
+          <GoogleLoginButton
+            onClick={() => signIn("google", { callbackUrl: "/" })}
+          >
             <FontAwesomeIcon icon={faGoogle} />
             Sign in with Google
           </GoogleLoginButton>
