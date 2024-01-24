@@ -4,7 +4,7 @@ import prisma from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
 import IssuesActions from "./IssuesActions";
 import { Issue, Status } from "@prisma/client";
-import { ArrowUpIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 
 interface Props {
   searchParams: { status: Status; orderBy: keyof Issue };
@@ -35,6 +35,20 @@ const IssuesPage = async ({ searchParams }: Props) => {
     orderBy,
   });
 
+  const getOrderIcon = (column: keyof Issue) => {
+    if (
+      column === searchParams.orderBy ||
+      `-${column}` === searchParams.orderBy
+    ) {
+      return searchParams.orderBy.startsWith("-") ? (
+        <ArrowDownIcon className="inline" />
+      ) : (
+        <ArrowUpIcon className="inline" />
+      );
+    }
+    return null;
+  };
+
   return (
     <div>
       <IssuesActions />
@@ -48,14 +62,18 @@ const IssuesPage = async ({ searchParams }: Props) => {
               >
                 <NextLink
                   href={{
-                    query: { ...searchParams, orderBy: column.value },
+                    query: {
+                      ...searchParams,
+                      orderBy:
+                        column.value === searchParams.orderBy
+                          ? `-${column.value}`
+                          : column.value,
+                    },
                   }}
                 >
                   {column.label}
                 </NextLink>
-                {column.value === searchParams.orderBy && (
-                  <ArrowUpIcon className="inline" />
-                )}
+                {getOrderIcon(column.value)}
               </Table.ColumnHeaderCell>
             ))}
           </Table.Row>
