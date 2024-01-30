@@ -5,7 +5,14 @@ import Spinner from "@/app/components/Spinner";
 import { IssueSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Issue } from "@prisma/client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Callout,
+  Flex,
+  Select,
+  TextField,
+} from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
@@ -13,6 +20,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
+import StatusSelect from "../[id]/edit/StatusSelect";
 
 type IssueFormData = z.infer<typeof IssueSchema>;
 
@@ -54,14 +62,20 @@ const IssueForm = ({ issue }: Props) => {
         </Callout.Root>
       )}
       <form className="space-y-3" onSubmit={onSubmit}>
-        <TextField.Root>
-          <TextField.Input
-            defaultValue={issue?.title}
-            placeholder="Title"
-            {...register("title")}
-          />
-        </TextField.Root>
-        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+        <Flex direction={issue ? "row" : "column"} justify="between">
+          <Box>
+            <TextField.Root>
+              <TextField.Input
+                className={issue ? "!w-52 md:!w-96" : ""}
+                defaultValue={issue?.title}
+                placeholder="Title"
+                {...register("title")}
+              />
+            </TextField.Root>
+            <ErrorMessage>{errors.title?.message}</ErrorMessage>
+          </Box>
+          {issue && <StatusSelect issue={issue} />}
+        </Flex>
         <Controller
           name="description"
           control={control}
